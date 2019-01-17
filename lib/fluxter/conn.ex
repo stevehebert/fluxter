@@ -34,6 +34,9 @@ defmodule Fluxter.Conn do
   end
 
   def init(conn) do
+    IO.inspect conn
+    #{:ok, socket} = :gen_tcp.listen(port, [:binary, packet: :line, active: false, reuseaddr: true])
+    #{:ok, sock} = :gen_tcp.fdopen(0, [active: false])
     {:ok, sock} = :gen_udp.open(0, [active: false])
     {:ok, %{conn | sock: sock}}
   end
