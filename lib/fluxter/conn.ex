@@ -27,7 +27,6 @@ defmodule Fluxter.Conn do
       when (is_binary(name) or is_list(name)) and is_list(tags) and is_list(fields) do
     # TODO: Remove `try` wrapping when we depend on Elixir ~> 1.3
     try do
-      IO.puts "writing measurement #{name}"
       GenServer.cast(worker, {:write, name, tags, fields})
     catch
       _, _ -> :ok
@@ -57,13 +56,7 @@ defmodule Fluxter.Conn do
            }}
   def init(conn) do
     IO.inspect conn
-    #{:ok, socket} = :gen_tcp.listen(port, [:binary, packet: :line, active: false, reuseaddr: true])
-    #{:ok, sock} = :gen_tcp.fdopen(0, [active: false])
     {:ok, sock} = :gen_tcp.connect(conn.host, conn.port, [active: false])
-    IO.inspect sock
-    IO.puts "here"
-
-    #{:ok, sock} = :gen_udp.open(0, [active: false])
     {:ok, %{conn | sock: sock}}
   end
 
